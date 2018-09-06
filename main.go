@@ -8,16 +8,6 @@ import (
 	"github.com/lwnmengjing/goAdminBackand/routers"
 )
 
-func init()  {
-	for _, db := range utils.Config.Db {
-		engine, err := db.GetEngin()
-		if err != nil {
-			log.Fatalln(err)
-		}
-		utils.Engin.SetXormEngin(db.Name, engine)
-	}
-}
-
 func main() {
 	port := utils.Config.HttpPort
 	if port == "" {

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"log"
 	"sync"
 	"github.com/xormplus/xorm"
 )
@@ -25,6 +26,13 @@ type xormEngin struct {
 
 func init()  {
 	Engin = NewXormPool()
+	for _, db := range Config.Db {
+		engine, err := db.GetEngin()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		Engin.SetXormEngin(db.Name, engine)
+	}
 }
 
 func NewXormPool() *xormEngin {
@@ -41,6 +49,7 @@ func (x *xormEngin) SetXormEngin(k string, e *xorm.Engine) {
 
 func (x *xormEngin) GetXormEngin(k string) (e *xorm.Engine, found bool) {
 	x.mux.Lock()
+	defer x.mux.Unlock()
 	if e, found = x.items[k]; !found {
 		return nil, false
 	}

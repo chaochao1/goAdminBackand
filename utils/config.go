@@ -24,6 +24,7 @@ type Db struct {
 	Log 			string			`yaml:"log"`
 	MaxIdleConns	int				`yaml:"max-idle-conns"`
 	MaxOpenConns	int				`yaml:"max-open-conns"`
+	ShowSql			bool			`yaml:"show-sql"`
 }
 
 func NewConfig() *config {
@@ -42,8 +43,8 @@ func init()  {
 	}
 }
 
-func (db *Db) GetEngin() (engin *xorm.Engine, err error) {
-	engin, err = xorm.NewEngine(db.Driver, db.Dsn)
+func (db *Db) GetEngin() (engine *xorm.Engine, err error) {
+	engine, err = xorm.NewEngine(db.Driver, db.Dsn)
 	if err != nil {
 		return
 	}
@@ -53,13 +54,14 @@ func (db *Db) GetEngin() (engin *xorm.Engine, err error) {
 		if err != nil {
 			return
 		}
-		engin.SetLogger(xorm.NewSimpleLogger(f))
+		engine.SetLogger(xorm.NewSimpleLogger(f))
+		engine.ShowSQL(true)
 	}
 	if db.MaxIdleConns > 0 {
-		engin.SetMaxIdleConns(db.MaxIdleConns)
+		engine.SetMaxIdleConns(db.MaxIdleConns)
 	}
 	if db.MaxOpenConns > 0 {
-		engin.SetMaxOpenConns(db.MaxOpenConns)
+		engine.SetMaxOpenConns(db.MaxOpenConns)
 	}
 	return
 }

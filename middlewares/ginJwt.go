@@ -22,7 +22,7 @@ func init() {
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*models.User); ok {
 				return jwt.MapClaims{
-					"id": v.UserName,
+					"id": v.Username,
 				}
 			}
 			return jwt.MapClaims{}
@@ -32,20 +32,17 @@ func init() {
 			if err := c.Bind(&loginVals); err != nil {
 				return "", jwt.ErrMissingLoginValues
 			}
-			userID := loginVals.Username
-			password := loginVals.Password
-
-			if (userID == "admin" && password == "admin") || (userID == "test" && password == "test") {
-				return &models.User{
-					UserName:  userID,
-					LastName:  "Bo-Yi",
-					FirstName: "Wu",
-				}, nil
+			u := models.User{
+				Username: loginVals.Username,
+			}
+			if u.Verify(loginVals.Password) {
+				return &u, nil
 			}
 
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
+			return true
 			if v, ok := data.(string); ok && v == "admin" {
 				return true
 			}

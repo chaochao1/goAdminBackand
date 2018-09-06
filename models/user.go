@@ -1,54 +1,81 @@
 package models
 
 import (
-	"log"
-	"github.com/xormplus/xorm"
-	"errors"
 	"github.com/lwnmengjing/goAdminBackand/utils"
+	"log"
 )
 
 type User struct {
-	Id 		  	int64
-	UserName  	string		`xorm:"varchar(100) notnull 'username'"`
-	FirstName 	string		`xorm:"varchar(100) 'first_name'"`
-	LastName 	string		`xorm:"varchar(100) 'last_name'"`
-	CreatedAt 	int			`xorm:"created"`
-	UpdatedAt 	int			`xorm:"updated"`
+	*Base							`xorm:"-"`
+	Id 		  			int64		`json:"id"`
+	Username  			string		`xorm:"varchar(100) notnull index default ''" json:"username"`
+	RealName  			string		`xorm:"varchar(100) default ''" json:"real_name"`
+	Email 				string		`xorm:"varchar(50) default ''" json:"email"`
+	Status 				int			`xorm:"SMALLINT default 1" json:"status"`
+	AuthKey 			string		`xorm:"varchar(32) default ''" json:"-"`
+	PasswordHash		string		`xorm:"varchar(255) default ''" json:"-"`
+	PasswordResetToken	string		`xorm:"varchar(255) default ''" json:"-"`
+	password			string		`xorm:"-"`
+	CreatedAt 			int			`xorm:"created" json:"created_at"`
+	UpdatedAt 			int			`xorm:"updated" json:"updated_at"`
 }
-
-//func init() {
-//	if xrom, found := utils.Engin.GetXormEngin("default"); !found {
-//		log.Println("Database default is not found")
-//	} else {
-//		xrom.Ping()
-//	}
-//
-//}
 
 func (u *User) TableName() string {
 	return utils.Config.TablePrefix + "user"
 }
 
-func (u *User) Engin() (e *xorm.Engine, err error) {
-	var found bool
-	if e, found = utils.Engin.GetXormEngin("default"); !found {
-		log.Println("Database default is not found")
-		err = errors.New("Database default is not found")
+func init()  {
+	u := new(User)
+	if e, err := u.GetDb(); err != nil {
+		log.Println(err)
 	} else {
-		e.Ping()
+		err := e.Sync2(u)
+		if err != nil {
+			log.Println(err)
+		}
 	}
-	return
 }
 
-func (u *User)Insert() (err error) {
-	engin, err := u.Engin()
+func (u *User) Insert() (err error) {
+	engine, err := u.GetDb()
 	if err != nil {
 		return
 	}
-	id, err := engin.Insert(u)
+	id, err := engine.Insert(u)
 	if err != nil {
 		return err
 	}
 	u.Id = id
 	return
+}
+
+func (u *User) SetPassword(value string)  {
+	u.password = value
+	u.generateAuthKey()
+	u.PasswordHash, _ = utils.SetPassword(u.password, u.AuthKey)
+}
+
+func (u *User) GetPasswordHash(p string) string {
+	passwordHash, err := utils.SetPassword(p, u.AuthKey)
+	if err != nil {
+		return ""
+	}
+	return passwordHash
+}
+
+func (u *User) GetPassword() (string) {
+	return u.password
+}
+
+func (u *User) generateAuthKey() {
+	u.AuthKey =	utils.GenerateRandomKey()
+}
+
+func (u *User) Verify(p string) bool {
+	engine, err := u.GetDb()
+	if err != nil {
+		return false
+	}
+	engine.Where("username = ?", u.Username).Get(u)
+	return u.GetPasswordHash(p) == u.PasswordHash
 }

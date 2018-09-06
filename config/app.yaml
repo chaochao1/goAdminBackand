@@ -1,11 +1,12 @@
 name: admin
 http-port: 8080
 runmode: dev
-table-prefix: admin_
+table-prefix: gab_
 db:
   - name: default
     driver: mysql
-    dsn: lwx:jsptpd@tcp(218.94.126.251:3306)/lwx_admin_go?charset=utf8mb4,utf8
+    dsn: lwx:jsptpd@tcp(218.94.126.251:3306)/lwx_backend_go?charset=utf8mb4
     log: runtime/log/mysql/default.log
     max-idle-conn: 5
     max-open-conns: 30
+    show-sql: true

@@ -17,6 +17,7 @@ func init()  {
 	authMiddleware := middlewares.AuthMiddleware
 
 	Router.POST("/login", authMiddleware.LoginHandler)
+	Router.POST("/register", user.Register)
 	auth := Router.Group("/auth")
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
