@@ -1,5 +1,0 @@
-[xorm] [info]  2018/09/06 23:13:24.329727 [SQL] SELECT `TABLE_NAME`, `ENGINE`, `TABLE_ROWS`, `AUTO_INCREMENT`, `TABLE_COMMENT` from `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_SCHEMA`=? AND (`ENGINE`='MyISAM' OR `ENGINE` = 'InnoDB' OR `ENGINE` = 'TokuDB') [lwx_backend_go]
-[xorm] [info]  2018/09/06 23:13:24.792519 [SQL] SELECT `COLUMN_NAME`, `IS_NULLABLE`, `COLUMN_DEFAULT`, `COLUMN_TYPE`, `COLUMN_KEY`, `EXTRA`,`COLUMN_COMMENT` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA` = ? AND `TABLE_NAME` = ? [lwx_backend_go gab_user]
-[xorm] [info]  2018/09/06 23:13:24.946763 [SQL] SELECT `INDEX_NAME`, `NON_UNIQUE`, `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`STATISTICS` WHERE `TABLE_SCHEMA` = ? AND `TABLE_NAME` = ? [lwx_backend_go gab_user]
-[xorm] [warn]  2018/09/06 23:13:25.097859 Table gab_user Column real_name db nullable is false, struct nullable is true
-[xorm] [info]  2018/09/06 23:13:29.240166 [SQL] SELECT `id`, `username`, `real_name`, `email`, `status`, `auth_key`, `password_hash`, `password_reset_token`, `created_at`, `updated_at` FROM `gab_user` WHERE (username = ?) AND `username`=? LIMIT 1 []interface {}{"linwenxiang", "linwenxiang"}
