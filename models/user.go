@@ -6,25 +6,25 @@ import (
 )
 
 type User struct {
-	*Base							`xorm:"-"`
-	Id 		  			int64		`json:"id"`
-	Username  			string		`xorm:"varchar(100) notnull index default ''" json:"username"`
-	RealName  			string		`xorm:"varchar(100) default ''" json:"real_name"`
-	Email 				string		`xorm:"varchar(50) default ''" json:"email"`
-	Status 				int			`xorm:"SMALLINT default 1" json:"status"`
-	AuthKey 			string		`xorm:"varchar(32) default ''" json:"-"`
-	PasswordHash		string		`xorm:"varchar(255) default ''" json:"-"`
-	PasswordResetToken	string		`xorm:"varchar(255) default ''" json:"-"`
-	password			string		`xorm:"-"`
-	CreatedAt 			int			`xorm:"created" json:"created_at"`
-	UpdatedAt 			int			`xorm:"updated" json:"updated_at"`
+	*Base              `xorm:"-"`
+	Id                 int64  `json:"id"`
+	Username           string `xorm:"varchar(100) notnull index default ''" json:"username"`
+	RealName           string `xorm:"varchar(100) default ''" json:"real_name"`
+	Email              string `xorm:"varchar(50) default ''" json:"email"`
+	Status             int    `xorm:"SMALLINT default 1" json:"status"`
+	AuthKey            string `xorm:"varchar(32) default ''" json:"-"`
+	PasswordHash       string `xorm:"varchar(255) default ''" json:"-"`
+	PasswordResetToken string `xorm:"varchar(255) default ''" json:"-"`
+	password           string `xorm:"-"`
+	CreatedAt          int    `xorm:"created" json:"created_at"`
+	UpdatedAt          int    `xorm:"updated" json:"updated_at"`
 }
 
 func (u *User) TableName() string {
 	return utils.Config.TablePrefix + "user"
 }
 
-func init()  {
+func init() {
 	u := new(User)
 	if e, err := u.GetDb(); err != nil {
 		log.Println(err)
@@ -49,7 +49,7 @@ func (u *User) Insert() (err error) {
 	return
 }
 
-func (u *User) SetPassword(value string)  {
+func (u *User) SetPassword(value string) {
 	u.password = value
 	u.generateAuthKey()
 	u.PasswordHash, _ = utils.SetPassword(u.password, u.AuthKey)
@@ -63,12 +63,12 @@ func (u *User) GetPasswordHash(p string) string {
 	return passwordHash
 }
 
-func (u *User) GetPassword() (string) {
+func (u *User) GetPassword() string {
 	return u.password
 }
 
 func (u *User) generateAuthKey() {
-	u.AuthKey =	utils.GenerateRandomKey()
+	u.AuthKey = utils.GenerateRandomKey()
 }
 
 func (u *User) Verify(p string) bool {

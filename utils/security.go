@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"math/rand"
-	"golang.org/x/crypto/scrypt"
 	"encoding/hex"
+	"golang.org/x/crypto/scrypt"
+	"math/rand"
 )
 
 //生成32位随机字符串

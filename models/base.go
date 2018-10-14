@@ -1,18 +1,17 @@
 package models
 
 import (
-	"github.com/xormplus/xorm"
 	"errors"
 	"github.com/lwnmengjing/goAdminBackand/utils"
+	"github.com/xormplus/xorm"
 )
 
 type ActiveRecod interface {
-	GetDb()	(e *xorm.Engine, err error)
+	GetDb() (e *xorm.Engine, err error)
 	TableName() string
 }
 
 type Base struct {
-
 }
 
 func (u *Base) TableName() string {

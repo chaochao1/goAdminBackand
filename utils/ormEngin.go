@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"github.com/xormplus/xorm"
 	"log"
 	"sync"
-	"github.com/xormplus/xorm"
 )
 
 var (
@@ -20,11 +20,11 @@ type XormEngin struct {
 }
 
 type xormEngin struct {
-	mux 	sync.Mutex
-	items	map[string]*xorm.Engine
+	mux   sync.Mutex
+	items map[string]*xorm.Engine
 }
 
-func init()  {
+func init() {
 	Engin = NewXormPool()
 	for _, db := range Config.Db {
 		engine, err := db.GetEngin()
