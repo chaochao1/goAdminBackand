@@ -1,19 +1,19 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"github.com/appleboy/gin-jwt"
-	"net/http"
+	"github.com/gin-gonic/gin"
 	"github.com/lwnmengjing/goAdminBackand/forms"
 	"github.com/lwnmengjing/goAdminBackand/models"
-	"fmt"
+	"net/http"
 )
 
 type UserController struct {
 	*BaseController
 }
 
-func (this *UserController) Init()  {
+func (this *UserController) Init() {
 
 }
 
@@ -21,8 +21,8 @@ func (this *UserController) Create(c *gin.Context) {
 	var userForm forms.User
 	if err := c.BindJSON(&userForm); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": http.StatusBadRequest,
-			"data": nil,
+			"code":    http.StatusBadRequest,
+			"data":    nil,
 			"message": "params set failed",
 		})
 	}
@@ -31,8 +31,8 @@ func (this *UserController) Create(c *gin.Context) {
 	}
 	if err := user.Insert(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": http.StatusInternalServerError,
-			"data": nil,
+			"code":    http.StatusInternalServerError,
+			"data":    nil,
 			"message": err.Error(),
 		})
 	}
@@ -40,7 +40,7 @@ func (this *UserController) Create(c *gin.Context) {
 }
 
 func (this *UserController) Get(c *gin.Context) {
-	c.JSON(200, gin.H{"data":  "pong"})
+	c.JSON(200, gin.H{"data": "pong"})
 }
 
 func (this *UserController) Hello(c *gin.Context) {
@@ -55,9 +55,9 @@ func (this *UserController) Register(c *gin.Context) {
 	var register forms.Register
 	if err := c.BindJSON(&register); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": http.StatusUnprocessableEntity,
+			"code":    http.StatusUnprocessableEntity,
 			"message": err.Error(),
-			"data": nil,
+			"data":    nil,
 		})
 		return
 	}
@@ -65,24 +65,24 @@ func (this *UserController) Register(c *gin.Context) {
 	user := models.User{
 		Username: register.Username,
 		RealName: register.RealName,
-		Email: register.Email,
-		Status: 1,
+		Email:    register.Email,
+		Status:   1,
 	}
 	user.SetPassword(register.Password)
 	if err := user.Insert(); err != nil {
 		fmt.Println(err)
 
 		c.JSON(http.StatusOK, gin.H{
-			"code": http.StatusBadRequest,
+			"code":    http.StatusBadRequest,
 			"message": err.Error(),
-			"data": nil,
+			"data":    nil,
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code": http.StatusCreated,
+		"code":    http.StatusCreated,
 		"message": nil,
-		"data": user,
+		"data":    user,
 	})
 }

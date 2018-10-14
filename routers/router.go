@@ -1,16 +1,17 @@
 package routers
 
 import (
+	"github.com/gin-contrib/authz"
 	"github.com/gin-gonic/gin"
-	"github.com/lwnmengjing/goAdminBackand/middlewares"
 	"github.com/lwnmengjing/goAdminBackand/controllers"
+	"github.com/lwnmengjing/goAdminBackand/middlewares"
 )
 
 var (
 	Router = gin.Default()
 )
 
-func init()  {
+func init() {
 
 	base := new(controllers.BaseController)
 	user := new(controllers.UserController)
@@ -26,7 +27,7 @@ func init()  {
 
 	}
 
-	v1 := Router.Group("/v1", authMiddleware.MiddlewareFunc())
+	v1 := Router.Group("/v1", authMiddleware.MiddlewareFunc(), authz.NewAuthorizer(middlewares.Enforce))
 	{
 		v1.GET("/ping", user.Get)
 		v1.POST("/user", user.Create)

@@ -2,10 +2,10 @@ package middlewares
 
 import (
 	"github.com/appleboy/gin-jwt"
-	"time"
 	"github.com/gin-gonic/gin"
 	"github.com/lwnmengjing/goAdminBackand/forms"
 	"github.com/lwnmengjing/goAdminBackand/models"
+	"time"
 )
 
 var (

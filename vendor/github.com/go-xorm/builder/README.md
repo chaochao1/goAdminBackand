@@ -1,6 +1,6 @@
 # SQL builder
 
-[![CircleCI](https://circleci.com/gh/go-xorm/builder/tree/master.svg?style=svg)](https://circleci.com/gh/go-xorm/builder/tree/master)  [![codecov](https://codecov.io/gh/go-xorm/builder/branch/master/graph/badge.svg)](https://codecov.io/gh/go-xorm/builder)
+[![GitCI.cn](https://gitci.cn/api/badges/go-xorm/builder/status.svg)](https://gitci.cn/go-xorm/builder)  [![codecov](https://codecov.io/gh/go-xorm/builder/branch/master/graph/badge.svg)](https://codecov.io/gh/go-xorm/builder)
 [![](https://goreportcard.com/badge/github.com/go-xorm/builder)](https://goreportcard.com/report/github.com/go-xorm/builder)
 
 Package builder is a lightweight and fast SQL builder for Go and XORM.
@@ -13,6 +13,12 @@ Make sure you have installed Go 1.8+ and then:
 
 ```Go
 sql, args, err := builder.Insert(Eq{"c": 1, "d": 2}).Into("table1").ToSQL()
+
+// INSERT INTO table1 SELECT * FROM table2
+sql, err := builder.Insert().Into("table1").Select().From("table2").ToBoundSQL()
+
+// INSERT INTO table1 (a, b) SELECT b, c FROM table2
+sql, err = builder.Insert("a, b").Into("table1").Select("b, c").From("table2").ToBoundSQL()
 ```
 
 # Select

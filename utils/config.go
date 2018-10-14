@@ -1,37 +1,37 @@
 package utils
 
 import (
+	"github.com/xormplus/xorm"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
-	"gopkg.in/yaml.v2"
 	"os"
-	"github.com/xormplus/xorm"
 )
 
 var Config *config
 
 type config struct {
-	Name			string			`yaml:"name"`
-	HttpPort		string			`yaml:"http-port"`
-	TablePrefix		string			`yaml:"table-prefix"`
-	Db				[]Db			`yaml:"db"`
+	Name        string `yaml:"name"`
+	HttpPort    string `yaml:"http-port"`
+	TablePrefix string `yaml:"table-prefix"`
+	Db          []Db   `yaml:"db"`
 }
 
 type Db struct {
-	Name 			string			`yaml:"name"`
-	Driver			string			`yaml:"driver"`
-	Dsn 			string			`yaml:"dsn"`
-	Log 			string			`yaml:"log"`
-	MaxIdleConns	int				`yaml:"max-idle-conns"`
-	MaxOpenConns	int				`yaml:"max-open-conns"`
-	ShowSql			bool			`yaml:"show-sql"`
+	Name         string `yaml:"name"`
+	Driver       string `yaml:"driver"`
+	Dsn          string `yaml:"dsn"`
+	Log          string `yaml:"log"`
+	MaxIdleConns int    `yaml:"max-idle-conns"`
+	MaxOpenConns int    `yaml:"max-open-conns"`
+	ShowSql      bool   `yaml:"show-sql"`
 }
 
 func NewConfig() *config {
 	return &config{}
 }
 
-func init()  {
+func init() {
 	Config = NewConfig()
 	file, err := ioutil.ReadFile("config/app.yaml")
 	if err != nil {
